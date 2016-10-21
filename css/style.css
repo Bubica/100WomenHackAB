@@ -1,0 +1,24 @@
+.friends {
+	width: 100%;
+	min-height: 250px;
+	background-color: teal;
+	border: white 1px solid;
+	margin: 20px auto;
+}
+
+.age {
+	width: 100%;
+	min-height: 250px;
+	background-color: maroon;
+	border: white 1px solid;
+	margin: 20px auto;
+}
+
+.location {
+	width: 100%;
+	min-height: 250px;
+	background-color: yellow;
+	border: white 1px solid;
+	margin: 20px auto;
+}
+

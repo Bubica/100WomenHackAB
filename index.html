@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="js/Chart.bundle.js"></script>
+
+</head>
+<body>
+
+<div class="friends">
+	<div id="canvas-holder" style="width:50%">
+        <canvas id="chart-area" width="300" height="300" />
+    </div>
+</div>
+
+<div class="age"></div>
+
+<div class="location"></div>
+
+<script>
+    var randomScalingFactor = function() {
+        return Math.round(Math.random() * 100);
+    };
+    var randomColorFactor = function() {
+        return Math.round(Math.random() * 255);
+    };
+    var randomColor = function(opacity) {
+        return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+    };
+
+    var config = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [
+                    randomScalingFactor(),
+                    randomScalingFactor(),
+                ],
+                backgroundColor: [
+                    "#F7464A",
+                    "#46BFBD",
+                ],
+            }],
+            labels: [
+                "Male",
+                "Female",
+            ]
+        },
+        options: {
+            responsive: true
+        }
+    };
+
+    window.onload = function() {
+        var ctx = document.getElementById("chart-area").getContext("2d");
+        window.myPie = new Chart(ctx, config);
+    };
+
+    $('#randomizeData').click(function() {
+        $.each(config.data.datasets, function(i, piece) {
+            $.each(piece.data, function(j, value) {
+                config.data.datasets[i].data[j] = randomScalingFactor();
+                config.data.datasets[i].backgroundColor[j] = randomColor(0.7);
+            });
+        });
+        window.myPie.update();
+    });
+    </script>
+</body>
+
+</html>
