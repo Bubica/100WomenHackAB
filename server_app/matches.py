@@ -40,13 +40,13 @@ class User(object):
 def match(user):
     women100, countries = load_100women_and_countries()
 
+    age_match = match_on_age(user, women100)
     location_match = match_on_location(user, women100)
-    # age_match = match_on_location(user, women100)
 
-    # return format_response(location_match, age_match)
+    return format_response(location_match, age_match)
 
 
-def age_match(user, women100):
+def match_on_age(user, women100):
     if not user or not user.age:
         return None
 
@@ -56,7 +56,7 @@ def age_match(user, women100):
     return age_sorted[0]
 
 
-def location_match(user, women100):
+def match_on_location(user, women100):
     countries = load_countries()
     hometown_coords = get_hometown_coords(user.hometown, countries)
     if not user_hometown_coords:
@@ -90,6 +90,16 @@ def get_hometown_coords(hometown, countries):
 
 def earth_distance(coords1, coords2):
     return round(great_circle(coords1, coords2).meters, 2)
+
+
+def format_response(location_match, age_match):
+    result = {}
+    if age_match:
+        result['age'] = age_match.to_dict()
+    if location_match:
+        result['location'] = location_match.to_dict()
+    return json.dumps(location_match, indent=4)
+
 import unittest
 
 

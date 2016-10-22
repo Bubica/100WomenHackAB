@@ -49,6 +49,15 @@ class Woman(object):
             link_text=dct.get('link_text')
         )
 
+    @classmethod
+    def to_dict(self):
+        return {
+            'age': self.age,
+            'firstname': self.firstname,
+            'surname': self.surname,
+            'nationality': self.nationality,
+        }
+
     def __repr__(self):
         return "firstname: {}, surname: {}, age: {}".format(self.firstname, self.surname, self.age)
 
