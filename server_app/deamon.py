@@ -15,17 +15,21 @@ class RequestHandler(BaseHTTPRequestHandler):
         # Test with:  curl http://172.22.75.212:8080?foo=bar
 
         request_path = self.path
+        params = get_GET_params(request_path)
 
         print("\n----- GET Request Start ----->\n")
-        print("Full request path : {} ".format(request_path))
-        print("Headers: ".format(self.headers))
-        print("GET params : {} ".format(get_GET_params(request_path)))
+        print("GET params : {} ".format(params))
         print("<----- GET Request End -----\n")
 
-        self.send_response(200)
-        self.send_header("Content-type", "text/plain")
-        self.end_headers()
-        self.wfile.write("<html><head><title>100 Ladies 100 problems</title></head>")
+        if not params or 'map' not in params:
+            self.send_response(404)
+        else:
+            self.send_response(200)
+            self.send_header("Content-type", "img/png")
+            self.end_headers()
+            with open(params.get('map'), 'r') as f:
+                self.wfile.write(f.read())
+                # self.wfile.write("<html><head><title>100 Ladies 100 problems</title></head>")
 
     def do_POST(self):
         request_path = self.path
@@ -57,6 +61,9 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 def get_GET_params(request_path):
     query = urlparse(request_path).query
+    print query
+    if not query:
+        return {}
     return dict(qc.split("=") for qc in query.split("&"))
 
 
