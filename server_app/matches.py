@@ -8,9 +8,6 @@ from .map_generator import generate_map_img
 from .resources import load_100women_and_countries, Coords
 
 
-MAP_PNG = 'world.png'
-
-
 def match(user):
     women100, countries = load_100women_and_countries()
 
@@ -42,9 +39,9 @@ def match_on_location(user, women100):
 
 def generate_map_content(user_coords, woman_coords):
     if user_coords and woman_coords:
-        success = generate_map_img(user_coords, woman_coords)
-        if success:
-            return MAP_PNG
+        map_filename = generate_map_img(user_coords, woman_coords)
+        if map_filename is not None:
+            return map_filename
 
     return None
 
