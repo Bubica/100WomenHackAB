@@ -8,31 +8,6 @@ from .request_handler import process_request
 LOCAL_IP = '172.22.75.212'
 LOCAL_PORT = 8080
 
-fixture = json.dumps({
-    "user":
-    {
-        'firstname': 'Tina',
-        'surname': 'Yellow',
-        'age': 15,
-    },
-    "matches": {
-        'by_age':
-        {
-            "name": "Anne",
-            "surname": "Brown",
-            "age": 13,
-            'nationality': 'british'
-        },
-        'by_location':
-        {
-            "name": "Vida",
-            "surname": "Sugar",
-            "age": 56,
-            'nationality': 'french'
-        }
-    }
-})
-
 
 class RequestHandler(BaseHTTPRequestHandler):
 
@@ -60,9 +35,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         print(payload)
         print("<----- POST Request End -----\n")
 
-        # process_request()
-        # matches = process_request(payload)
-        matches = fixture
+        matches = process_request(payload)
         self.send_matches(matches)
 
     def send_matches(self, matches):
@@ -78,7 +51,8 @@ class RequestHandler(BaseHTTPRequestHandler):
     def get_POST_payload(self):
         content_length = self.headers.getheaders('content-length')
         length = int(content_length[0]) if content_length else 0
-        return self.rfile.read(length)
+        # return self.rfile.read(length)
+        return '{"birthday": "04/16/1983","hometown": { "id": "116619061681465", "name": "Zagreb, Croatia" },"first_name": "Agata", "last_name": "Brajdic", "id": "10154711934932119", "picture":{"data":{"is_silhouette":false,"url":"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/v/t1.0-1/c63.64.795.795/s50x50/534067_10151387453072119_1860096328_n.jpg?oh=e619774a131044e779df005c641f8ea8&oe=588C4A4E&__gda__=1482895449_afebc340b65ede0646fc193f27922626"}}}'
 
 
 def get_GET_params(request_path):
