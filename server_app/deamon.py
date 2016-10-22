@@ -3,7 +3,7 @@ import json
 
 from urlparse import urlparse
 
-from .request_handler import parse_user
+from .request_handler import process_request
 
 LOCAL_IP = '172.22.75.212'
 LOCAL_PORT = 8080
@@ -61,6 +61,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("<----- POST Request End -----\n")
 
         # process_request()
+        # matches = process_request(payload)
         matches = fixture
         self.send_matches(matches)
 
