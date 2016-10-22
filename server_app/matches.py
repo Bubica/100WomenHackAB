@@ -1,9 +1,10 @@
 import math
 import json
 
+from geopy.distance import great_circle
 from geopy.geocoders import Nominatim
 
-from .resources import load_100women_and_countries
+from .resources import load_100women_and_countries, Coords
 
 # {
 #     "user": {
@@ -39,7 +40,6 @@ class User(object):
 def match(user):
     women100, countries = load_100women_and_countries()
 
-    user = User(hometown='Zagreb')
     location_match = match_on_location(user, women100)
     # age_match = match_on_location(user, women100)
 
@@ -62,16 +62,34 @@ def location_match(user, women100):
     if not user_hometown_coords:
         return None
 
-    find_woman_with_closest_location()
+    find_woman_with_closest_location(hometown_coords, women100)
+
+
+def find_woman_with_closest_location(hometown_coords, women100):
+    closest_woman = None
+    closest_distance = None
+    for woman in women100:
+        if not woman.country:
+            continue
+
+        dist = earth_distance(hometown_coords, women100.country.coords)
+
+        if closest_distance is None or dist < closest_distance:
+            closest_woman = woman
+            closest_distance = dist
+
+    return closest_woman
 
 
 def get_hometown_coords(hometown, countries):
     geolocator = Nominatim()
     location = geolocator.geocode(hometown)
     if location:
-        return (location.latitude, location.longitude)
+        return Coords(lat=location.latitude, lng=location.longitude)
 
 
+def earth_distance(coords1, coords2):
+    return round(great_circle(coords1, coords2).meters, 2)
 import unittest
 
 
@@ -83,6 +101,11 @@ class TestMatch(unittest.TestCase):
         best_match = age_match(user, women100)
         self.assertEqual(49, best_match.age)
         self.assertEqual('Tina', best_match.firstname)
+
+    def test_earth_dist(self):
+        coords1 = Coords(51, 0)
+        coords2 = Coords(51, 0.01)
+        self.assertEqual(699.97, earth_distance(coords1, coords2))
 
 
 if __name__ == '__main__':

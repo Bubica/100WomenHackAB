@@ -1,9 +1,12 @@
+from collections import namedtuple
 import csv
 import os
 
 WOMEN_FILENAME = '100women.csv'
 COUNTRIES_COORDS_FILENAME = 'cow.csv'
 COUNTRIES_NATIONALITIES_FILENAME = 'country_nationalities.csv'
+
+Coords = namedtuple('Coords', 'lat,lng')
 
 
 class Woman(object):
@@ -52,11 +55,10 @@ class Woman(object):
 
 class Country(object):
 
-    def __init__(self, name=None, capital=None, lat=None, lng=None, nationality=None):
+    def __init__(self, name=None, capital=None, coords=None, nationality=None):
         self.name = str(name.strip().lower()) if name else None
         self.capital = str(capital.strip().lower()) if capital else None
-        self.lat = float(lat) if lat else None
-        self.lng = float(lng) if lng else None
+        self.coords = coords
         self.nationality = str(nationality.strip().lower()) if nationality else None
 
 
@@ -90,11 +92,10 @@ def load_countries():
         reader = csv.DictReader(csvfile, delimiter=';')
         for record in reader:
             name = record.get('ISOen_name')
-            lat = record.get('longitude')
-            lng = record.get('latitude')
+            coords = Coords(lat=float(record.get('latitude')), lng=float(record.get('longitude')))
             capital = record.get('BGN_capital')
             nationality = record.get('BGN_demomyn_adj').split(',')[-1]
-            country = Country(name=name, lat=lat, lng=lng, capital=capital, nationality=nationality)
+            country = Country(name=name, coords=coords, capital=capital, nationality=nationality)
             countries.append(country)
     return countries
 
