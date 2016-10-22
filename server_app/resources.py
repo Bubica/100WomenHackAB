@@ -84,41 +84,18 @@ def load_100women():
 
 
 def load_countries():
-    countries_1 = _load_countries_and_coords()
-    countries_2 = _load_countries_and_nationalities()
-    return match_country_records(countries_1, countries_2)
-
-
-def match_country_records(countries_1, countries_2):
-    represented_subset = set(countries_1.keys()) & set(countries_2.keys())
-    countries = []
-    for country_name in represented_subset:
-        entry1 = countries_1[country_name]
-        entry2 = countries_2[country_name]
-
-        country = Country(
-            name=country_name,
-            capital=entry1.capital or entry2.capital,
-            lat=entry1.lat or entry2.lat,
-            lng=entry1.lng or entry2.lng,
-            nationality=entry1.nationality or entry2.nationality,
-        )
-        countries.append(country)
-    return countries
-
-
-def _load_countries_and_coords():
     filename = load_resource_filename(COUNTRIES_COORDS_FILENAME)
-    countries = {}
+    countries = []
     with open(filename, 'r') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
         for record in reader:
             name = record.get('ISOen_name')
             lat = record.get('longitude')
             lng = record.get('latitude')
-            capital = record.get('UNen_capital')
-            country = Country(name=name, lat=lat, lng=lng, capital=capital)
-            countries[country.name] = country
+            capital = record.get('BGN_capital')
+            nationality = record.get('BGN_demomyn_adj').split(',')[-1]
+            country = Country(name=name, lat=lat, lng=lng, capital=capital, nationality=nationality)
+            countries.append(country)
     return countries
 
 
@@ -145,11 +122,3 @@ def get_country_of_origin(woman, countries):
 def load_resource_filename(resource_name):
     resources_dir = os.path.join(os.path.dirname(__file__), 'resources')
     return os.path.join(resources_dir, resource_name)
-
-
-# for w in load_100women():
-#     print w.firstname, w.nationality,
-#     if w.country:
-#         print w.country.name
-#     else:
-#         print
