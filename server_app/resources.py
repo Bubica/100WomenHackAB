@@ -30,7 +30,7 @@ class Woman(object):
     @classmethod
     def from_dict(cls, dct):
         return cls(
-            age=dct.get('age'),
+            age=int(dct.get('age')) if dct.get('age') else None,
             _id=dct.get('id'),
             firstname=dct.get('firstname'),
             surname=dct.get('surname'),
@@ -47,7 +47,7 @@ class Woman(object):
         )
 
     def __repr__(self):
-        return "firstname: {}, surname: {}".format(self.firstname, self.surname)
+        return "firstname: {}, surname: {}, age: {}".format(self.firstname, self.surname, self.age)
 
 
 class Country(object):
