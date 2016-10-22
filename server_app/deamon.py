@@ -2,6 +2,8 @@ from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 # from optparse import OptionParser
 from urlparse import urlparse
 
+LOCAL_IP = '172.22.75.212'
+
 
 class RequestHandler(BaseHTTPRequestHandler):
 
@@ -19,7 +21,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/plain")
         self.end_headers()
-        self.wfile.write("<html><head><title>GET Stuff</title></head>")
+        self.wfile.write("<html><head><title>100 Ladies 100 problems</title></head>")
 
     def do_POST(self):
         # Test with: curl --data "foo=bar&foo2=bar2" http://localhost:8080
@@ -50,8 +52,8 @@ def get_GET_params(request_path):
 
 def main():
     port = 8080
-    print('Listening on localhost:%s' % port)
-    server = HTTPServer(('', port), RequestHandler)
+    print('Listening on %s:%s' % (LOCAL_IP, port))
+    server = HTTPServer((LOCAL_IP, port), RequestHandler)
     server.serve_forever()
 
 
