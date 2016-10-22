@@ -6,36 +6,6 @@ from geopy.geocoders import Nominatim
 
 from .resources import load_100women_and_countries, Coords
 
-# {
-#     "user": {
-#         "photo_url": "www.blah"
-
-#     },
-#     "matches": [
-#         "nationality": 12,
-#         "age":187
-#     ],
-
-#     "100women": [
-#         {
-#             "id": 1,
-#             "name": "Hillary",
-#             "photo": "www...",
-#             "age":13
-#         }
-#     ]
-# }
-
-
-class User(object):
-    __slots__ = ('name', 'profile_photo_url', 'hometown', 'age')
-
-    def __init__(self, name=None, profile_photo_url=None, hometown=None, age=None):
-        self.name = name
-        self.profile_photo_url = profile_photo_url
-        self.hometown = hometown
-        self.age = age
-
 
 def match(user):
     women100, countries = load_100women_and_countries()
@@ -94,10 +64,10 @@ def earth_distance(coords1, coords2):
 def format_response(location_match, age_match):
     result = {}
     if age_match:
-        result['age'] = age_match.to_dict()
+        result['by_age'] = age_match.to_dict()
     if location_match:
-        result['location'] = location_match.to_dict()
-    return json.dumps(location_match, indent=4)
+        result['by_location'] = location_match.to_dict()
+    return result
 
 import unittest
 

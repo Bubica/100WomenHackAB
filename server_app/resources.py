@@ -9,6 +9,23 @@ COUNTRIES_NATIONALITIES_FILENAME = 'country_nationalities.csv'
 Coords = namedtuple('Coords', 'lat,lng')
 
 
+class User(object):
+
+    def __init__(self, firstname=None, surname=None, profile_photo_url=None, hometown=None, age=None):
+        self.firstname = firstname
+        self.surname = surname
+        self.profile_photo_url = profile_photo_url
+        self.hometown = hometown
+        self.age = age
+
+    def __repr__(self):
+        return "firstname: {}, surname: {}, age: {}, hometown: {}".format(self.firstname, self.surname, self.age, self.hometown)
+
+    def __eq__(self, other):
+        return self.age == other.age and self.hometown == other.hometown and \
+            self.firstname == other.firstname and self.surname == other.surname
+
+
 class Woman(object):
 
     def __init__(self, age, _id, firstname, surname, job, nationality, bio_paragraph1, bio_paragraph2,
@@ -49,7 +66,6 @@ class Woman(object):
             link_text=dct.get('link_text')
         )
 
-    @classmethod
     def to_dict(self):
         return {
             'age': self.age,
