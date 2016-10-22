@@ -28,7 +28,8 @@ def parse_user(user_json_string):
         firstname=user_dict.get('first_name'),
         surname=user_dict.get('last_name'),
         hometown=user_dict.get('hometown', {}).get('name'),
-        age=age)
+        age=age,
+        profile_photo_url=user_dict.get('picture', {}).get("data", {}).get('url'))
 
 
 def get_age_from_birthday(born_string):
@@ -68,7 +69,8 @@ class TestMatch(unittest.TestCase):
           },
           "first_name": "Agata",
           "last_name": "Brajdic",
-          "id": "10154711934932119"
+          "id": "10154711934932119",
+          "picture":{"data":{"is_silhouette":false,"url":"https://pic.url"}}
         }
     """
 
@@ -78,7 +80,8 @@ class TestMatch(unittest.TestCase):
 
     def test_parse_user(self):
         user = parse_user(self.user_fixture)
-        expected_user = User(age=33, firstname="Agata", surname="Brajdic", hometown="Zagreb, Croatia")
+        expected_user = User(age=33, firstname="Agata", surname="Brajdic",
+                             hometown="Zagreb, Croatia", profile_photo_url='https://pic.url')
         self.assertEqual(expected_user, user)
 
     def test_process_request(self):
@@ -89,7 +92,8 @@ class TestMatch(unittest.TestCase):
                      'firstname': 'Agata',
                      'hometown': 'Zagreb, Croatia',
                      'profile_photo_url': None,
-                     'surname': 'Brajdic'
+                     'surname': 'Brajdic',
+                     'profile_photo_url': 'https://pic.url',
                      },
             'matches': {
                 'by_age': {
