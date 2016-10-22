@@ -67,7 +67,6 @@ class Woman(object):
             link_text=dct.get('link_text')
         )
 
-    @classmethod
     def to_dict(self):
         return {
             'age': self.age,

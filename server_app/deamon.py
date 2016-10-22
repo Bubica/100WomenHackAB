@@ -1,14 +1,43 @@
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
-# from optparse import OptionParser
+import json
+
 from urlparse import urlparse
 
+from .request_handler import parse_user
+
 LOCAL_IP = '172.22.75.212'
+LOCAL_PORT = 8080
+
+fixture = json.dumps({
+    "user":
+    {
+        'firstname': 'Tina',
+        'surname': 'Yellow',
+        'age': 15,
+    },
+    "matches": {
+        'by_age':
+        {
+            "name": "Anne",
+            "surname": "Brown",
+            "age": 13,
+            'nationality': 'british'
+        },
+        'by_location':
+        {
+            "name": "Vida",
+            "surname": "Sugar",
+            "age": 56,
+            'nationality': 'french'
+        }
+    }
+})
 
 
 class RequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        # Test with:  curl http://localhost:8080?foo=bar
+        # Test with:  curl http://172.22.75.212:8080?foo=bar
 
         request_path = self.path
 
@@ -24,25 +53,31 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write("<html><head><title>100 Ladies 100 problems</title></head>")
 
     def do_POST(self):
-        # Test with: curl --data "foo=bar&foo2=bar2" http://localhost:8080
-
         request_path = self.path
-        request_headers = self.headers
-        content_length = request_headers.getheaders('content-length')
-        length = int(content_length[0]) if content_length else 0
+        payload = self.get_POST_payload()
 
         print("\n----- POST Request Start ----->\n")
-        print(request_headers)
-        print(self.rfile.read(length))
+        print(payload)
         print("<----- POST Request End -----\n")
 
+        # process_request()
+        matches = fixture
+        self.send_matches(matches)
+
+    def send_matches(self, matches):
         self.send_response(200)
-        self.send_header("Content-type", "text/plain")
+        self.send_header("Content-type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "http://www.100women.com:8000")
         self.end_headers()
-        self.wfile.write("<html><head><title>POST Stuff</title></head>")
+        self.wfile.write(matches)
 
     do_PUT = do_POST
     do_DELETE = do_GET
+
+    def get_POST_payload(self):
+        content_length = self.headers.getheaders('content-length')
+        length = int(content_length[0]) if content_length else 0
+        return self.rfile.read(length)
 
 
 def get_GET_params(request_path):
@@ -51,9 +86,8 @@ def get_GET_params(request_path):
 
 
 def main():
-    port = 8080
-    print('Listening on %s:%s' % (LOCAL_IP, port))
-    server = HTTPServer((LOCAL_IP, port), RequestHandler)
+    print('Listening on %s:%s' % (LOCAL_IP, LOCAL_PORT))
+    server = HTTPServer((LOCAL_IP, LOCAL_PORT), RequestHandler)
     server.serve_forever()
 
 
