@@ -1,6 +1,7 @@
 from datetime import datetime
 import math
 import json
+import os
 
 from .matches import match
 from .resources import User
@@ -8,16 +9,17 @@ from .resources import User
 
 def process_request(request_payload):
     user = parse_user(request_payload)
+    matches = None
     if user:
         matches = match(user)
-    return format_output(user, matches)
+    return format_output(matches)
 
 
-def format_output(user, matches):
-    result = {}
-    result['matches'] = matches or {}
-    result['user'] = user.__dict__ if user else {}
-    return json.dumps(result)
+def format_output(result):
+    if result:
+        return json.dumps(result)
+    else:
+        return "{}"
 
 
 def parse_user(user_json_string):

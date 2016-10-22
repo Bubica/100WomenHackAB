@@ -4,16 +4,19 @@ import json
 from geopy.distance import great_circle
 from geopy.geocoders import Nominatim
 
+from .map_generator import generate_map_img
 from .resources import load_100women_and_countries, Coords
+
+
+MAP_PNG = 'world.png'
 
 
 def match(user):
     women100, countries = load_100women_and_countries()
 
     age_match = match_on_age(user, women100)
-    location_match = match_on_location(user, women100)
-
-    return format_response(location_match, age_match)
+    location_match, map_file = match_on_location(user, women100)
+    return format_response(user, location_match, age_match, map_file)
 
 
 def match_on_age(user, women100):
@@ -31,7 +34,19 @@ def match_on_location(user, women100):
     if not hometown_coords:
         return None
 
-    return find_woman_with_closest_location(hometown_coords, women100)
+    closest_woman = find_woman_with_closest_location(hometown_coords, women100)
+    map_file = generate_map_content((hometown_coords.lat, hometown_coords.lng),
+                                    (closest_woman.country.coords.lat, closest_woman.country.coords.lng))
+    return closest_woman, map_file
+
+
+def generate_map_content(user_coords, woman_coords):
+    if user_coords and woman_coords:
+        success = generate_map_img(user_coords, woman_coords)
+        if success:
+            return MAP_PNG
+
+    return None
 
 
 def find_woman_with_closest_location(hometown_coords, women100):
@@ -61,12 +76,19 @@ def earth_distance(coords1, coords2):
     return round(great_circle(coords1, coords2).meters, 2)
 
 
-def format_response(location_match, age_match):
+def format_response(user, location_match, age_match, map_file):
     result = {}
+    result['user'] = user.__dict__ if user else {}
+
+    match_result = {}
     if age_match:
-        result['by_age'] = age_match.to_dict()
+        match_result['by_age'] = age_match.to_dict()
     if location_match:
-        result['by_location'] = location_match.to_dict()
+        match_result['by_location'] = location_match.to_dict()
+
+    result['matches'] = match_result
+    if map_file:
+        result['map_file'] = map_file
     return result
 
 import unittest
@@ -89,7 +111,7 @@ class TestMatch(unittest.TestCase):
     def test_loc_match(self):
         user = User(hometown='Dublin')
         women100, _ = load_100women_and_countries()
-        best_match = match_on_location(user, women100)
+        _, best_match = match_on_location(user, women100)
         self.assertEqual('british', best_match.nationality)
 
 
