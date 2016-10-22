@@ -10,7 +10,15 @@ import unittest
 def process_request(request_payload):
     user = parse_user(request_payload)
     if user:
-        return match(user)
+        matches = match(user)
+    return format_output(user, matches)
+
+
+def format_output(user, matches):
+    result = {}
+    result['matches'] = matches or {}
+    result['user'] = user.__dict__ if user else {}
+    return json.dumps(result)
 
 
 def parse_user(user_json_string):
@@ -74,18 +82,30 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(expected_user, user)
 
     def test_process_request(self):
-        match_dict = process_request(self.user_fixture)
-        expected_dict = {
-            'matches': {'by_age': {'age': 33,
-                                   'firstname': 'Aissa ',
-                                   'nationality': 'french',
-                                                'surname': 'Edon'},
+        match_dict_str = process_request(self.user_fixture)
 
-                        'by_location': {'age': 27,
-                                        'firstname': 'Zuzanna',
-                                        'nationality': 'polish',
-                                                     'surname': 'Stanska'}}}
-        self.assertDictEqual(expected_dict, match_dict)
+        expected_dict = {
+            'user': {'age': 33,
+                     'firstname': 'Agata',
+                     'hometown': 'Zagreb, Croatia',
+                     'profile_photo_url': None,
+                     'surname': 'Brajdic'
+                     },
+            'matches': {
+                'by_age': {
+                    'age': 33,
+                    'firstname': 'Aissa ',
+                    'nationality': 'french',
+                    'surname': 'Edon'
+                },
+                'by_location': {
+                    'age': 27,
+                    'firstname': 'Zuzanna',
+                    'nationality': 'polish',
+                    'surname': 'Stanska'}
+            }
+        }
+        self.assertDictEqual(expected_dict, json.loads(match_dict_str))
 
 if __name__ == '__main__':
     unittest.main()

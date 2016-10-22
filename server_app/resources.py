@@ -10,7 +10,6 @@ Coords = namedtuple('Coords', 'lat,lng')
 
 
 class User(object):
-    __slots__ = ('firstname', 'surname', 'profile_photo_url', 'hometown', 'age')
 
     def __init__(self, firstname=None, surname=None, profile_photo_url=None, hometown=None, age=None):
         self.firstname = firstname

@@ -67,7 +67,7 @@ def format_response(location_match, age_match):
         result['by_age'] = age_match.to_dict()
     if location_match:
         result['by_location'] = location_match.to_dict()
-    return {"matches": result}
+    return result
 
 import unittest
 
