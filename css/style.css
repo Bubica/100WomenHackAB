@@ -1,24 +1,47 @@
-.friends {
-	width: 100%;
+body {
+	font-size:;
+}
+.section { 
+	width: 80%;
 	min-height: 250px;
-	background-color: teal;
-	border: white 1px solid;
+	border: teal 1px solid;
+	margin: 20px auto;
+	display: block;
+	padding: 16px;
+}
+
+h2 {
+	text-align: center;
+}
+
+.pie-chart {
+	width: 80%;
+	display: block;
 	margin: 20px auto;
 }
 
-.age {
-	width: 100%;
-	min-height: 250px;
-	background-color: maroon;
-	border: white 1px solid;
+.container {
+	position: relative;
+	min-height: 275px;
+	width: 80%;
+	display: block;
 	margin: 20px auto;
 }
 
-.location {
-	width: 100%;
+.imageContainer {
+	margin-top: 16px;
+	display: inline-block;
+	width: 30%;
 	min-height: 250px;
-	background-color: yellow;
-	border: white 1px solid;
-	margin: 20px auto;
+	border: solid 1px purple;
+	position: absolute;
 }
 
+.userImage {
+
+}
+
+.matchImage {
+	float: right;
+	margin-left: 65%;
+}

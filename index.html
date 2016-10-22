@@ -1,74 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
-<link rel="stylesheet" href="css/normalize.css">
-<link rel="stylesheet" href="css/style.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="js/Chart.bundle.js"></script>
+	<title>Page Title</title>
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/Chart.bundle.js"></script>
 
 </head>
 <body>
 
-<div class="friends">
-	<div id="canvas-holder" style="width:50%">
-        <canvas id="chart-area" width="300" height="300" />
-    </div>
-</div>
+	<h1>1 of 100 Women</h1>
 
-<div class="age"></div>
+	<div class="section friends">
+		<h2>How many of your friends are women?</h2>
+		<div id="canvas-holder" class="pie-chart">
+			<canvas id="chart-area" class="pie"/>
+		</div>
+	</div>
 
-<div class="location"></div>
+	<div class="section age">
+		<h2>Your closest match, based on age</h2>
+		<div class="container">
+			<div class="imageContainer userImage age" id="user_age_container"></div>
+			<div class="imageContainer matchImage age" id="match_age_container"></div>
+		</div>
+	</div>
 
-<script>
-    var randomScalingFactor = function() {
-        return Math.round(Math.random() * 100);
-    };
-    var randomColorFactor = function() {
-        return Math.round(Math.random() * 255);
-    };
-    var randomColor = function(opacity) {
-        return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
-    };
+	<div class="section location">
+		<h2>Your closest match, based on location</h2>
+		<div class="container">
+			<div class="imageContainer userImage geo" id="user_geo_container"></div>
+			<div class="imageContainer matchImage geo" id="match_geo_container"></div>
+		</div>
+	</div>
 
-    var config = {
-        type: 'pie',
-        data: {
-            datasets: [{
-                data: [
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                ],
-                backgroundColor: [
-                    "#F7464A",
-                    "#46BFBD",
-                ],
-            }],
-            labels: [
-                "Male",
-                "Female",
-            ]
-        },
-        options: {
-            responsive: true
-        }
-    };
+	<script>
+		var config = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [
+					120,
+					180
+					],
+					backgroundColor: [
+					"#F7464A",
+					"#46BFBD",
+					]
+				}],
+				labels: [
+				"Female",
+				"Male",
+				]
+			},
+			options: {
+				responsive: true
+			}
+		};
 
-    window.onload = function() {
-        var ctx = document.getElementById("chart-area").getContext("2d");
-        window.myPie = new Chart(ctx, config);
-    };
-
-    $('#randomizeData').click(function() {
-        $.each(config.data.datasets, function(i, piece) {
-            $.each(piece.data, function(j, value) {
-                config.data.datasets[i].data[j] = randomScalingFactor();
-                config.data.datasets[i].backgroundColor[j] = randomColor(0.7);
-            });
-        });
-        window.myPie.update();
-    });
-    </script>
+		window.onload = function() {
+			var ctx = document.getElementById("chart-area").getContext("2d");
+			window.myPie = new Chart(ctx, config);
+		};
+	</script>
 </body>
 
 </html>
