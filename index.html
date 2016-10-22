@@ -4,66 +4,77 @@
 	<title>Page Title</title>
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="js/Chart.bundle.js"></script>
 
 </head>
 <body>
-
-	<h1>1 of 100 Women</h1>
-
-	<div class="section friends">
-		<h2>How many of your friends are women?</h2>
-		<div id="canvas-holder" class="pie-chart">
-			<canvas id="chart-area" class="pie"/>
-		</div>
-	</div>
-
-	<div class="section age">
-		<h2>Your closest match, based on age</h2>
-		<div class="container">
-			<div class="imageContainer userImage age" id="user_age_container"></div>
-			<div class="imageContainer matchImage age" id="match_age_container"></div>
-		</div>
-	</div>
-
-	<div class="section location">
-		<h2>Your closest match, based on location</h2>
-		<div class="container">
-			<div class="imageContainer userImage geo" id="user_geo_container"></div>
-			<div class="imageContainer matchImage geo" id="match_geo_container"></div>
-		</div>
-	</div>
-
 	<script>
-		var config = {
-			type: 'pie',
-			data: {
-				datasets: [{
-					data: [
-					120,
-					180
-					],
-					backgroundColor: [
-					"#F7464A",
-					"#46BFBD",
-					]
-				}],
-				labels: [
-				"Female",
-				"Male",
-				]
-			},
-			options: {
-				responsive: true
-			}
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '1172343992836432',
+				xfbml      : true,
+				version    : 'v2.8'
+			});
 		};
 
-		window.onload = function() {
-			var ctx = document.getElementById("chart-area").getContext("2d");
-			window.myPie = new Chart(ctx, config);
-		};
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
 	</script>
-</body>
 
+	<div class="section intro">
+		<h1>1 of 100 Women</h1>
+		<img src="img/100_women_LOGOS_UK 624px.jpg" alt="100 Women Logo">
+		<div
+		class="fb-like"
+		data-share="true"
+		data-width="450"
+		data-show-faces="true">
+	</div>
+</div>
+
+
+
+<div class="section friends">
+	<h2>How many of your friends are women?</h2>
+	<div id="canvas-holder" class="pie-chart">
+		<canvas id="chart-area" class="pie"/>
+	</div>
+</div>
+
+<div class="section age">
+	<h2>Your closest match, based on age</h2>
+	<div class="container">
+		<div class="imageContainer userImage age" id="user_age_container">
+			<!--add image -->
+			<h3 class="name user" id="user_name_age"></h3>
+		</div>
+		<div class="imageContainer matchImage age" id="match_age_container">
+			<!--add image -->
+			<h3 class="name match" id="match_name_age"></h3>
+		</div>
+	</div>
+</div>
+
+<div class="section location">
+	<h2>Your closest match, based on location</h2>
+	<div class="container">
+		<div class="imageContainer userImage geo" id="user_geo_container">
+			<!--add image -->
+			<h3 class="name user" id="user_name_geo"></h3>
+		</div>
+		<div class="imageContainer matchImage geo" id="match_geo_container">
+			<!--add image -->
+			<h3 class="name match" id="match_name_geo"></h3>
+		</div>
+	</div>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/Chart.bundle.js"></script>
+	<script src="js/dataVis.js"></script>
 </html>

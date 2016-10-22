@@ -1,6 +1,17 @@
 body {
-	font-size:;
+	font-size: 16px;
+	padding: 0 0 60px;
 }
+
+h1, h2 {
+	text-align: center;
+}
+
+img {
+	display: block;
+	margin: 16px auto;
+}
+
 .section { 
 	width: 80%;
 	min-height: 250px;
@@ -8,10 +19,11 @@ body {
 	margin: 20px auto;
 	display: block;
 	padding: 16px;
+	margin-bottom: 32px;
 }
 
-h2 {
-	text-align: center;
+.intro {
+	border: none;
 }
 
 .pie-chart {
@@ -25,7 +37,7 @@ h2 {
 	min-height: 275px;
 	width: 80%;
 	display: block;
-	margin: 20px auto;
+	margin: 24px auto;
 }
 
 .imageContainer {
