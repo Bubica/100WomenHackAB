@@ -2,9 +2,8 @@ from datetime import datetime
 import math
 import json
 
-from .resources import User
 from .matches import match
-import unittest
+from .resources import User
 
 
 def process_request(request_payload):
@@ -56,6 +55,9 @@ def parse_birthday_string(birthday_string):
     except ValueError:
         pass
     return birthday
+
+
+import unittest
 
 
 class TestMatch(unittest.TestCase):
