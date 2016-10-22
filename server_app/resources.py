@@ -59,7 +59,7 @@ class Woman(object):
         }
 
     def __repr__(self):
-        return "firstname: {}, surname: {}, age: {}".format(self.firstname, self.surname, self.age)
+        return "firstname: {}, surname: {}, age: {}, nationality: {}".format(self.firstname, self.surname, self.age, self.nationality)
 
 
 class Country(object):

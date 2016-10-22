@@ -57,12 +57,11 @@ def match_on_age(user, women100):
 
 
 def match_on_location(user, women100):
-    countries = load_countries()
-    hometown_coords = get_hometown_coords(user.hometown, countries)
-    if not user_hometown_coords:
+    hometown_coords = get_hometown_coords(user.hometown)
+    if not hometown_coords:
         return None
 
-    find_woman_with_closest_location(hometown_coords, women100)
+    return find_woman_with_closest_location(hometown_coords, women100)
 
 
 def find_woman_with_closest_location(hometown_coords, women100):
@@ -72,7 +71,7 @@ def find_woman_with_closest_location(hometown_coords, women100):
         if not woman.country:
             continue
 
-        dist = earth_distance(hometown_coords, women100.country.coords)
+        dist = earth_distance(hometown_coords, woman.country.coords)
 
         if closest_distance is None or dist < closest_distance:
             closest_woman = woman
@@ -81,7 +80,7 @@ def find_woman_with_closest_location(hometown_coords, women100):
     return closest_woman
 
 
-def get_hometown_coords(hometown, countries):
+def get_hometown_coords(hometown):
     geolocator = Nominatim()
     location = geolocator.geocode(hometown)
     if location:
@@ -108,7 +107,7 @@ class TestMatch(unittest.TestCase):
     def test_age_match(self):
         user = User(age=50)
         women100, _ = load_100women_and_countries()
-        best_match = age_match(user, women100)
+        best_match = match_on_age(user, women100)
         self.assertEqual(49, best_match.age)
         self.assertEqual('Tina', best_match.firstname)
 
@@ -116,6 +115,12 @@ class TestMatch(unittest.TestCase):
         coords1 = Coords(51, 0)
         coords2 = Coords(51, 0.01)
         self.assertEqual(699.97, earth_distance(coords1, coords2))
+
+    def test_loc_match(self):
+        user = User(hometown='Dublin')
+        women100, _ = load_100women_and_countries()
+        best_match = match_on_location(user, women100)
+        self.assertEqual('british', best_match.nationality)
 
 
 if __name__ == '__main__':
