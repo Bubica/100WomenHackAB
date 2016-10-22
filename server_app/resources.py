@@ -45,6 +45,7 @@ class Woman(object):
         self.image = image
         self.link_url = link_url
         self.link_text = link_text
+
         self.country = country
 
     @classmethod
@@ -68,10 +69,13 @@ class Woman(object):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'age': self.age,
             'firstname': self.firstname,
             'surname': self.surname,
             'nationality': self.nationality,
+            'job': self.job,
+            'description': self.description,
         }
 
     def __repr__(self):
